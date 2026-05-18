@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Jalan extends Model
 {
-    protected $table = 'jalan';
+    protected $table = 'jalans';
     
     const UPDATED_AT = null;
 
