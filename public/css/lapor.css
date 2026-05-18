@@ -63,10 +63,46 @@
 @media (max-width: 768px) {
   .formGrid {
     grid-template-columns: 1fr;
-    gap: 0;
+    gap: 16px; /* Bring back spacing for inputs */
   }
+
   .laporFormContainer {
-    padding: 24px;
+    padding: 24px 20px;
+    margin: -30px 15px 100px 15px; /* Bottom margin to avoid sticky button overlap */
+    border-radius: var(--radius-md);
+  }
+
+  .laporHeader {
+    padding: 50px 15px 80px 15px; /* Deeper header to accommodate floating form */
+  }
+
+  .laporHeader h1 {
+    font-size: 28px;
+  }
+  
+  .laporHeader p {
+    font-size: 15px;
+  }
+
+  /* One-handed friendly sticky submit button */
+  .btnSubmit {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    padding: 20px;
+    font-size: 18px;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 999;
+  }
+  
+  /* Prevent horizontal scroll if inputs are too wide */
+  .form-group input, 
+  .form-group select {
+    font-size: 16px; /* Prevents auto-zoom on iOS */
+    padding: 14px; /* Larger tap target */
   }
 }
 

@@ -37,18 +37,31 @@
             <form method="POST" action="{{ route('lapor') }}" enctype="multipart/form-data" class="laporForm" id="formLapor">
                 @csrf
                 <div class="formGrid">
+                    @php
+                        // Gunakan zona waktu Indonesia (WIB)
+                        $now = \Carbon\Carbon::now('Asia/Jakarta');
+                        $tanggalSekarang = $now->format('Y-m-d');
+                        
+                        $hour = (int)$now->format('H');
+                        if ($hour >= 0 && $hour < 11) {
+                            $keterangan = 'Pagi';
+                        } elseif ($hour >= 11 && $hour < 15) {
+                            $keterangan = 'Siang';
+                        } elseif ($hour >= 15 && $hour < 18) {
+                            $keterangan = 'Sore';
+                        } else {
+                            $keterangan = 'Malam';
+                        }
+                        
+                        $waktuSekarang = $now->format('H:i') . ' ' . $keterangan;
+                    @endphp
                     <div class="form-group">
                         <label>Tanggal Kejadian <span class="required">*</span></label>
-                        <input type="date" name="tanggal" required value="{{ old('tanggal', date('Y-m-d')) }}" />
+                        <input type="date" name="tanggal" required value="{{ $tanggalSekarang }}" readonly style="background-color: #f1f2f6; color: #7f8c8d; cursor: not-allowed;" />
                     </div>
                     <div class="form-group">
                         <label>Waktu <span class="required">*</span></label>
-                        <select name="waktu" required>
-                            <option value="" disabled selected>Pilih waktu</option>
-                            <option value="Pagi">Pagi</option>
-                            <option value="Siang">Siang</option>
-                            <option value="Malam">Malam</option>
-                        </select>
+                        <input type="text" name="waktu" required value="{{ $waktuSekarang }}" readonly style="background-color: #f1f2f6; color: #7f8c8d; cursor: not-allowed;" />
                     </div>
                 </div>
 
@@ -154,22 +167,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
             
-            // Marker is draggable so they can fine-tune it
-            marker = L.marker([lat, lng], { draggable: true }).addTo(map);
-            
-            // Drag marker event
-            marker.on('dragend', function() {
-                const position = marker.getLatLng();
-                latInput.value = position.lat.toFixed(6);
-                lngInput.value = position.lng.toFixed(6);
-            });
-            
-            // Map click event to move marker
-            map.on('click', function(e) {
-                marker.setLatLng(e.latlng);
-                latInput.value = e.latlng.lat.toFixed(6);
-                lngInput.value = e.latlng.lng.toFixed(6);
-            });
+            // Marker is fixed to the detected location to prevent fake reports
+            marker = L.marker([lat, lng], { draggable: false }).addTo(map);
         }
     }
 
@@ -181,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 gpsStatusBox.className = 'gpsStatus success';
                 gpsIcon.className = 'bx bx-check-circle';
-                gpsText.textContent = 'Lokasi GPS berhasil dideteksi otomatis (Bisa disesuaikan manual di peta).';
+                gpsText.textContent = 'Lokasi GPS Anda berhasil dideteksi dan dikunci otomatis.';
                 
                 initMap(lat, lng);
             },
@@ -189,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error(err);
                 gpsStatusBox.className = 'gpsStatus success';
                 gpsIcon.className = 'bx bx-map-pin';
-                gpsText.innerHTML = '<strong>Mode Manual Aktif:</strong> Silakan geser pin merah atau klik peta untuk menentukan lokasi.';
+                gpsText.innerHTML = '<strong>Akses Lokasi Ditolak:</strong> Anda tidak dapat membuat laporan tanpa menyalakan lokasi GPS (GPS Wajib).';
                 
                 // Fallback coordinates: Jakarta (-6.2088, 106.8456)
                 initMap(-6.2088, 106.8456);
@@ -199,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         gpsStatusBox.className = 'gpsStatus success';
         gpsIcon.className = 'bx bx-map-pin';
-        gpsText.innerHTML = '<strong>Mode Manual Aktif:</strong> Silakan geser pin merah atau klik peta untuk menentukan lokasi.';
+        gpsText.innerHTML = '<strong>Akses Lokasi Ditolak:</strong> Anda tidak dapat membuat laporan tanpa menyalakan lokasi GPS (GPS Wajib).';
         
         // Fallback coordinates: Jakarta (-6.2088, 106.8456)
         initMap(-6.2088, 106.8456);
