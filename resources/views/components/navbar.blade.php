@@ -19,7 +19,7 @@
 
             <div class="actions">
                 @auth
-                    <a href="{{ route('pengaturan') }}" class="userGreeting">Halo, {{ Auth::user()->nama }}</a>
+                    <a href="{{ route('pengaturan') }}" class="userGreeting"><i class='bx bx-user-circle'></i><span>{{ Auth::user()->nama }}</span></a>
                     <button onclick="document.getElementById('logoutModal').classList.add('active')" class="btn btn-outline">Keluar</button>
                 @else
                     <a href="{{ route('login') }}" class="btn btn-outline">Masuk</a>
