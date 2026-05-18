@@ -1,0 +1,138 @@
+.main {
+  background: var(--bg-color);
+  padding-bottom: 80px;
+}
+
+.laporHeader {
+  background: var(--primary-color);
+  color: var(--white);
+  padding: 60px 20px;
+  text-align: center;
+  margin-bottom: -60px;
+}
+
+.laporHeader h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.laporHeader p {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+.laporFormContainer {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  box-shadow: var(--shadow-lg);
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.laporForm {
+  margin-top: 20px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.required {
+  color: var(--danger);
+}
+
+.helpText {
+  display: block;
+  margin-top: 6px;
+  color: var(--text-light);
+  font-size: 13px;
+}
+
+.btnSubmit {
+  width: 100%;
+  padding: 16px;
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .laporFormContainer {
+    padding: 24px;
+  }
+}
+
+.gpsStatus {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.gpsStatus.loading {
+  background: rgba(52, 152, 219, 0.1);
+  color: #3498db;
+  border: 1px solid rgba(52, 152, 219, 0.2);
+}
+.gpsStatus.success {
+  background: rgba(39, 174, 96, 0.1);
+  color: #27ae60;
+  border: 1px solid rgba(39, 174, 96, 0.2);
+}
+.gpsStatus.error {
+  background: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  border: 1px solid rgba(231, 76, 60, 0.2);
+}
+.gpsStatus i {
+  font-size: 20px;
+}
+
+.alertBoxSuccess {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+  color: #1e5631;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
+}
+.alertBoxSuccess i {
+  font-size: 40px;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 10px;
+  border-radius: 50%;
+}
+.alertBoxSuccess p {
+  margin: 0;
+  font-size: 15px;
+}
+
+.alertBoxError {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fdf3f2;
+  color: #e74c3c;
+  padding: 15px 20px;
+  border-radius: 10px;
+  border-left: 4px solid #e74c3c;
+  margin-bottom: 30px;
+  font-weight: 500;
+}
+.alertBoxError i {
+  font-size: 24px;
+}

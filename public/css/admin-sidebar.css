@@ -1,0 +1,133 @@
+.sidebar {
+  width: 260px;
+  background: #2c3e50;
+  color: white;
+  position: fixed;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  padding: 30px 20px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.logoSidebar {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logoSidebar img {
+  width: 60px;
+}
+
+.logoSidebar h2 {
+  margin-top: 10px;
+  font-size: 24px;
+  letter-spacing: 1px;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(0,0,0,0.2);
+  border-radius: var(--radius-sm);
+  margin-bottom: 30px;
+}
+
+.avatar {
+  background: var(--primary-color);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 18px;
+}
+
+.nav ul {
+  list-style: none;
+}
+
+.nav li {
+  margin: 10px 0;
+}
+
+.nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  color: #bdc3c7;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.nav a:hover, .nav a.active {
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+
+.logoutBtn {
+  color: #e74c3c !important;
+}
+
+.logoutBtn:hover {
+  background: rgba(231, 76, 60, 0.1) !important;
+}
+
+.mobileToggle {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: var(--secondary-color);
+  color: white;
+  border: none;
+  width: 45px;
+  height: 45px;
+  border-radius: var(--radius-sm);
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 101;
+  box-shadow: var(--shadow-sm);
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99;
+}
+
+@media (max-width: 768px) {
+  .mobileToggle {
+    display: block;
+  }
+  
+  .overlay {
+    display: block;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Make sure internal elements are visible on mobile */
+  .logoSidebar h2, .userInfo p, .nav a span {
+    display: block;
+  }
+  
+  .nav a {
+    justify-content: flex-start;
+  }
+}

@@ -1,0 +1,149 @@
+.main {
+  background: var(--bg-color);
+  min-height: 80vh;
+}
+
+.heroSection {
+  background: var(--primary-color);
+  color: var(--white);
+  padding: 60px 20px 80px;
+  text-align: center;
+}
+
+.heroSection h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.heroSection p {
+  opacity: 0.9;
+}
+
+.emptyState {
+  background: var(--white);
+  padding: 60px 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.emptyState i {
+  font-size: 64px;
+  color: var(--border-color);
+  margin-bottom: 20px;
+}
+
+.emptyState h3 {
+  color: var(--text-color);
+  margin-bottom: 8px;
+}
+
+.emptyState p {
+  color: var(--text-light);
+}
+
+.laporanList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.laporanCard {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.cardHeader h3 {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+  color: var(--text-color);
+}
+
+.date {
+  color: var(--text-light);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.statusBadge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.statusBadge.pending {
+  background: rgba(243, 156, 18, 0.1);
+  color: #f39c12;
+}
+
+.statusBadge.valid {
+  background: rgba(39, 174, 96, 0.1);
+  color: #27ae60;
+}
+
+.statusBadge.invalid {
+  background: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+}
+
+.cardBody {
+  padding: 20px;
+}
+
+.cardBody p {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+.cardBody p:last-child {
+  margin-bottom: 0;
+}
+
+.feedbackBox {
+  padding: 15px 20px;
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  font-size: 14px;
+}
+
+.feedbackBox i {
+  font-size: 24px;
+}
+
+.feedbackBox p {
+  margin: 5px 0 0 0;
+}
+
+.feedbackPending {
+  background: #fdf8e4;
+  color: #b08d00;
+  border-top: 1px solid #f39c12;
+}
+
+.feedbackValid {
+  background: #eafaf1;
+  color: #1e8449;
+  border-top: 1px solid #27ae60;
+}
+
+.feedbackInvalid {
+  background: #fdedec;
+  color: #c0392b;
+  border-top: 1px solid #e74c3c;
+}

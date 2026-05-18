@@ -1,0 +1,161 @@
+.main {
+  background: linear-gradient(135deg, #f4f6f9, #e9ecef);
+  padding: 60px 0;
+  display: flex;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 50px;
+  align-items: center;
+  animation: floatUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.mapSide {
+  min-height: 520px;
+  height: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.mapSide:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.12);
+}
+
+.formSide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.formBox {
+  background: var(--white);
+  padding: 45px 40px;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  width: 100%;
+}
+
+.headerBox {
+  margin-bottom: 30px;
+}
+
+.headerBox h2 {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--secondary-color);
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+
+.headerBox p {
+  color: var(--text-light);
+  font-size: 15px;
+}
+
+/* Elegant Inputs */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  background-color: rgba(248, 250, 252, 0.8);
+  color: var(--secondary-color);
+}
+
+.form-group input:hover {
+  border-color: rgba(0, 0, 0, 0.15);
+  background-color: rgba(248, 250, 252, 1);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background-color: var(--white);
+  box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.15);
+}
+
+/* Button & Link Overhaul */
+.btnFull {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 12px;
+  margin-top: 15px;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  color: var(--white);
+  border: none;
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.btnFull:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(231, 76, 60, 0.45);
+}
+
+.btnFull:active {
+  transform: translateY(1px);
+}
+
+.footerText {
+  text-align: center;
+  margin-top: 26px;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+.footerText a {
+  color: var(--primary-color);
+  font-weight: 700;
+  transition: color 0.2s;
+}
+
+.footerText a:hover {
+  color: var(--primary-hover);
+  text-decoration: none;
+}
+
+/* Animations */
+@keyframes floatUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 992px) {
+  .gridContainer {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .mapSide {
+    min-height: 350px;
+    order: 2;
+  }
+  .formSide {
+    order: 1;
+  }
+}

@@ -1,0 +1,90 @@
+.main {
+  background: var(--bg-color);
+  padding: 60px 0;
+  min-height: calc(100vh - 80px);
+}
+
+.pageTitle {
+  color: var(--secondary-color);
+  margin-bottom: 30px;
+  font-size: 32px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.dataPersonal, .riwayatLaporan {
+  background: var(--white);
+  padding: 30px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.dataPersonal h3, .riwayatLaporan h3 {
+  color: var(--secondary-color);
+  margin-bottom: 24px;
+  font-size: 20px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+}
+
+.tableResponsive {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table th {
+  color: var(--text-light);
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.valid {
+  background: #dcfce7;
+  color: var(--success);
+}
+
+.invalid {
+  background: #fdf2f2;
+  color: var(--danger);
+}
+
+.pending {
+  background: #fef9c3;
+  color: var(--warning);
+}
+
+.emptyState {
+  text-align: center;
+  color: var(--text-light);
+  padding: 30px !important;
+  font-style: italic;
+}
+
+@media (max-width: 992px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

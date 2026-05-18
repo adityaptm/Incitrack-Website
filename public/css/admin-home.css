@@ -1,0 +1,118 @@
+.mainContent {
+  margin-left: 260px;
+  padding: 40px;
+  width: 100%;
+  background: #f4f6f9;
+  min-height: 100vh;
+}
+
+.headerDashboard {
+  margin-bottom: 40px;
+}
+
+.headerDashboard h1 {
+  font-size: 32px;
+  color: var(--secondary-color);
+  margin-bottom: 8px;
+}
+
+.headerDashboard p {
+  color: var(--text-light);
+  font-size: 17px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-bottom: 60px;
+}
+
+.statCard {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: transform 0.3s;
+}
+
+.statCard:hover {
+  transform: translateY(-5px);
+}
+
+.statIcon {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: white;
+}
+
+.statInfo h3 {
+  font-size: 32px;
+  margin: 0;
+  color: var(--secondary-color);
+  line-height: 1;
+  margin-bottom: 5px;
+}
+
+.statInfo p {
+  margin: 0;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+.recentReports h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: var(--secondary-color);
+}
+
+.tableWrapper {
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table th {
+  background: #f8f9fa;
+  color: var(--secondary-color);
+  font-weight: 600;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.valid { background: #dcfce7; color: var(--success); }
+.invalid { background: #fdf2f2; color: var(--danger); }
+.pending { background: #fef9c3; color: var(--warning); }
+
+@media (max-width: 768px) {
+  .mainContent {
+    margin-left: 0;
+    padding: 80px 20px 20px;
+  }
+}
