@@ -32,6 +32,6 @@
         </div>
     </div>
     <div class="copyright">
-        <p>© INCITRACK {{ date('Y') }} - Berkomitmen untuk Keselamatan Jalan Raya Indonesia</p>
+        <p>© INCITRACK {{ date('Y') }} - Berkomitmen untuk Keselamatan Jalan Tol Indonesia</p>
     </div>
 </footer>

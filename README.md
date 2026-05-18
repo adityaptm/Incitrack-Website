@@ -1,59 +1,106 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🛣️ INCITRACK! - Platform Pelaporan & Visualisasi Insiden Jalan Tol
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="public/it.png" width="120" alt="INCITRACK Logo">
 </p>
 
-## About Laravel
+**INCITRACK** adalah platform berbasis web interaktif yang dirancang untuk membantu pengguna jalan melaporkan insiden kecelakaan atau hambatan lalu lintas secara real-time di ruas jalan tol Indonesia. Platform ini bertujuan membantu pengelola jalan tol dan instansi terkait melakukan mitigasi area rawan kecelakaan (black spot) dengan visualisasi peta interaktif.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🌟 Fitur Utama
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Autentikasi Multi-Role (User & Admin)**:
+   - **User Publik**: Dapat melihat peta sebaran kecelakaan yang valid, melakukan registrasi, mengedit profil, dan melihat riwayat laporan pribadi.
+   - **Administrator**: Memiliki hak penuh untuk mengelola master data jalan tol, meninjau bukti foto/video, mengubah status verifikasi laporan, dan menghapus masukan kontak.
 
-## Learning Laravel
+2. **Form Pelaporan Pintar & Real-time (GPS Geolocation)**:
+   - Mendeteksi titik koordinat lintang dan bujur (latitude & longitude) secara otomatis menggunakan GPS perangkat browser.
+   - **Smart Fallback (Mode Manual)**: Jika akses GPS diblokir oleh browser atau perangkat tidak memiliki sensor GPS, aplikasi secara cerdas beralih ke Mode Manual, memuat peta interaktif, mengaktifkan tombol submit, dan memungkinkan pengguna **mengetuk peta atau menggeser marker merah (draggable pin)** untuk menentukan titik kejadian secara presisi.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+3. **Peta Interaktif (Leaflet.js & OpenStreetMap)**:
+   - Visualisasi pemetaan dinamis untuk menandai lokasi persis koordinat kecelakaan di jalan tol.
+   - Marker pemetaan interaktif dilengkapi popup popup berisi keterangan jenis insiden, lokasi spesifik, tanggal kejadian, dan nama jalan tol.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+4. **Sistem Pengarsipan & Verifikasi**:
+   - Laporan baru masuk sebagai status `pending`. Setelah diverifikasi oleh Admin, laporan yang ditandai `valid` otomatis terpublikasikan ke peta publik.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🛠️ Spesifikasi Teknologi (Tech Stack)
 
-### Premium Partners
+*   **Backend Framework**: Laravel 11.x (PHP 8.x)
+*   **Database**: MySQL
+*   **Frontend Engine**: Blade Templating Engine (Laravel Native Views)
+*   **Styling**: Vanilla CSS (Modern Sleek UI, Boxicons, Glassmorphism elements)
+*   **Mapping Library**: Leaflet.js & OpenStreetMap API
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## 📂 Struktur Direktori Utama
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+*   `app/Http/Controllers/`: Logika bisnis utama (`PageController`, `AdminController`, `AuthController`).
+*   `app/Models/`: Model database & Relasi Eloquent ORM (`Laporan`, `Jalan`, `User`, `Contact`).
+*   `resources/views/`: Komponen Blade UI (`layouts/app.blade.php`, `components/navbar.blade.php`, `pages/`).
+*   `public/css/`: Aset stylesheet CSS native yang dinamis dan terpisah per halaman.
+*   `routes/web.php`: Peta rute URL aplikasi.
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## ⚙️ Cara Instalasi & Menjalankan Proyek
 
-## Security Vulnerabilities
+### Prerequisites
+Pastikan komputer Anda sudah terinstal:
+*   PHP >= 8.2
+*   Composer
+*   XAMPP / MySQL Server
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Langkah-Langkah:
+1. **Clone Repository**
+   ```bash
+   git clone https://github.com/adityaptm/Incitrack-Website.git
+   cd Incitrack-Website
+   ```
 
-## License
+2. **Instal Dependensi PHP**
+   ```bash
+   composer install
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+3. **Konfigurasi Environment (.env)**
+   Salin file `.env.example` menjadi `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+   Buka file `.env` dan sesuaikan pengaturan database Anda:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=incitrack
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+4. **Generate Application Key**
+   ```bash
+   php artisan key:generate
+   ```
+
+5. **Migrasi & Seeding Database**
+   Nyalakan MySQL di XAMPP, buat database baru bernama `incitrack`, lalu jalankan:
+   ```bash
+   php artisan migrate --seed
+   ```
+   *Perintah ini akan membuat semua struktur tabel dan akun administrator default.*
+
+6. **Jalankan Server Lokal**
+   ```bash
+   php artisan serve
+   ```
+   Buka alamat **`http://localhost:8000`** di browser Anda.
+
+---
+
+## 📄 Lisensi
+Proyek ini dibangun untuk tujuan akademik / ujian presentasi tugas akhir dan dilisensikan di bawah lisensi MIT.

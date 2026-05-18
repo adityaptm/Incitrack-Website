@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="form-group" style="margin-bottom: 30px;">
-                    <label>Titik Koordinat (Realtime Otomatis) <span class="required">*</span></label>
+                    <label>Titik Koordinat <span class="required">*</span></label>
                     <div class="gpsStatus" id="gpsStatusBox">
                         <i class='bx bx-loader-alt bx-spin' id="gpsIcon"></i>
                         <span id="gpsText">Mencari lokasi (GPS) otomatis...</span>
@@ -131,38 +131,78 @@ document.addEventListener('DOMContentLoaded', function() {
     let map = null;
     let marker = null;
 
+    function initMap(lat, lng) {
+        latInput.value = lat;
+        lngInput.value = lng;
+        btnSubmit.disabled = false;
+        mapDiv.style.display = 'block';
+        
+        if (map) {
+            map.setView([lat, lng], 15);
+            if (marker) {
+                marker.setLatLng([lat, lng]);
+            }
+        } else {
+            // Leaflet Map Initialization
+            map = L.map('map', { 
+                zoomControl: true, 
+                scrollWheelZoom: true, 
+                dragging: true 
+            }).setView([lat, lng], 15);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            
+            // Marker is draggable so they can fine-tune it
+            marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+            
+            // Drag marker event
+            marker.on('dragend', function() {
+                const position = marker.getLatLng();
+                latInput.value = position.lat.toFixed(6);
+                lngInput.value = position.lng.toFixed(6);
+            });
+            
+            // Map click event to move marker
+            map.on('click', function(e) {
+                marker.setLatLng(e.latlng);
+                latInput.value = e.latlng.lat.toFixed(6);
+                lngInput.value = e.latlng.lng.toFixed(6);
+            });
+        }
+    }
+
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             function(position) {
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
                 
-                latInput.value = lat;
-                lngInput.value = lng;
-                
                 gpsStatusBox.className = 'gpsStatus success';
                 gpsIcon.className = 'bx bx-check-circle';
-                gpsText.textContent = 'Lokasi GPS berhasil dideteksi otomatis.';
+                gpsText.textContent = 'Lokasi GPS berhasil dideteksi otomatis (Bisa disesuaikan manual di peta).';
                 
-                btnSubmit.disabled = false;
-                
-                mapDiv.style.display = 'block';
-                map = L.map('map', { zoomControl: false, scrollWheelZoom: false, dragging: false }).setView([lat, lng], 15);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-                marker = L.marker([lat, lng]).addTo(map);
+                initMap(lat, lng);
             },
             function(err) {
                 console.error(err);
-                gpsStatusBox.className = 'gpsStatus error';
-                gpsIcon.className = 'bx bx-error-circle';
-                gpsText.textContent = 'Gagal mendeteksi lokasi. Pastikan GPS menyala dan izinkan browser mengakses lokasi.';
+                gpsStatusBox.className = 'gpsStatus success';
+                gpsIcon.className = 'bx bx-map-pin';
+                gpsText.innerHTML = '<strong>Mode Manual Aktif:</strong> Silakan geser pin merah atau klik peta untuk menentukan lokasi.';
+                
+                // Fallback coordinates: Jakarta (-6.2088, 106.8456)
+                initMap(-6.2088, 106.8456);
             },
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
         );
     } else {
-        gpsStatusBox.className = 'gpsStatus error';
-        gpsIcon.className = 'bx bx-error-circle';
-        gpsText.textContent = 'Browser Anda tidak mendukung deteksi lokasi.';
+        gpsStatusBox.className = 'gpsStatus success';
+        gpsIcon.className = 'bx bx-map-pin';
+        gpsText.innerHTML = '<strong>Mode Manual Aktif:</strong> Silakan geser pin merah atau klik peta untuk menentukan lokasi.';
+        
+        // Fallback coordinates: Jakarta (-6.2088, 106.8456)
+        initMap(-6.2088, 106.8456);
     }
 
     document.getElementById('formLapor').addEventListener('submit', function(e) {
