@@ -14,7 +14,7 @@
         <div class="heroText">
             <h1>Tentang INCITRACK</h1>
             <p>
-                Platform visualisasi dan pencatatan kecelakaan lalu lintas untuk meningkatkan keselamatan jalan raya di Indonesia.
+                Platform visualisasi dan pelaporan kecelakaan lalu lintas secara real-time untuk meningkatkan keselamatan jalan tol di Indonesia.
             </p>
             <a href="{{ route('lapor') }}" class="btn btn-primary">Laporkan Sekarang</a>
         </div>
