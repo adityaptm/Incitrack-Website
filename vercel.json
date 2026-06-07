@@ -8,15 +8,7 @@
   },
   "routes": [
     {
-      "src": "/(build|css|uploads)/(.*)",
-      "dest": "/$1/$2"
-    },
-    {
-      "src": "/(.*\\.(png|jpg|jpeg|gif|svg|ico|css|js|woff|woff2|ttf|eot))$",
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*)",
+      "src": "/(?!build/|css/|uploads/|.*\\.(?:png|jpg|jpeg|gif|svg|ico|css|js|woff|woff2|ttf|eot)).*",
       "dest": "/api/index.php"
     }
   ],
