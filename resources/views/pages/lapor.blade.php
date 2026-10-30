@@ -1,130 +1,139 @@
 @extends('layouts.app')
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('css/lapor.css') }}">
-@endpush
-
 
 @push('styles')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 @endpush
 
 @section('content')
-<div class="main">
-    <section class="laporHeader">
-        <h1>Laporkan Kecelakaan Jalan Tol</h1>
-        <p>Bantu kami tingkatkan keselamatan jalan dengan laporan Anda</p>
-    </section>
-
+<section class="red-header-banner">
     <div class="container">
-        <div class="laporFormContainer">
-            @if($errors->any())
-                <div class="alertBoxError">
-                    <i class='bx bx-error'></i>
-                    <span>{{ $errors->first() }}</span>
-                </div>
-            @endif
+        <h1>Laporkan Kecelakaan Jalan Tol</h1>
+        <p>Bantu tingkatkan keselamatan dan percepat respons darurat dengan laporan akurat Anda</p>
+    </div>
+</section>
 
-            @if(session('success'))
-                <div class="alertBoxSuccess">
-                    <i class='bx bx-check-shield'></i>
-                    <div>
-                        <strong style="display: block; font-size: 18px; margin-bottom: 4px;">Laporan Terkirim!</strong>
-                        <p>{{ session('success') }}</p>
-                    </div>
-                </div>
-            @endif
+<div class="container floating-form-wrapper">
+    <div class="floating-form-card">
+        @if(isset($errors) && $errors->any())
+            <div class="alert alert-error">
+                <i class='bx bx-error-circle'></i>
+                <span>{{ $errors->first() }}</span>
+            </div>
+        @endif
 
-            <form method="POST" action="{{ route('lapor') }}" enctype="multipart/form-data" class="laporForm" id="formLapor">
-                @csrf
-                <div class="formGrid">
-                    @php
-                        // Gunakan zona waktu Indonesia (WIB)
-                        $now = \Carbon\Carbon::now('Asia/Jakarta');
-                        $tanggalSekarang = $now->format('Y-m-d');
-                        
-                        $hour = (int)$now->format('H');
-                        if ($hour >= 0 && $hour < 11) {
-                            $keterangan = 'Pagi';
-                        } elseif ($hour >= 11 && $hour < 15) {
-                            $keterangan = 'Siang';
-                        } elseif ($hour >= 15 && $hour < 18) {
-                            $keterangan = 'Sore';
-                        } else {
-                            $keterangan = 'Malam';
-                        }
-                        
-                        $waktuSekarang = $now->format('H:i') . ' ' . $keterangan;
-                    @endphp
-                    <div class="form-group">
-                        <label>Tanggal Kejadian <span class="required">*</span></label>
-                        <input type="date" name="tanggal" required value="{{ $tanggalSekarang }}" readonly style="background-color: #f1f2f6; color: #7f8c8d; cursor: not-allowed;" />
-                    </div>
-                    <div class="form-group">
-                        <label>Waktu <span class="required">*</span></label>
-                        <input type="text" name="waktu" required value="{{ $waktuSekarang }}" readonly style="background-color: #f1f2f6; color: #7f8c8d; cursor: not-allowed;" />
-                    </div>
+        @if(session('success'))
+            <div class="alert alert-success">
+                <i class='bx bx-check-circle'></i>
+                <div>
+                    <strong style="display: block; font-size: 15px;">Laporan Berhasil Terkirim!</strong>
+                    <span>{{ session('success') }}</span>
                 </div>
+            </div>
+        @endif
 
+        <form method="POST" action="{{ route('lapor') }}" enctype="multipart/form-data" id="formLapor">
+            @csrf
+
+            @php
+                $now = \Carbon\Carbon::now('Asia/Jakarta');
+                $tanggalSekarang = $now->format('Y-m-d');
+                $hour = (int)$now->format('H');
+                if ($hour >= 0 && $hour < 11) {
+                    $keterangan = 'Pagi';
+                } elseif ($hour >= 11 && $hour < 15) {
+                    $keterangan = 'Siang';
+                } elseif ($hour >= 15 && $hour < 18) {
+                    $keterangan = 'Sore';
+                } else {
+                    $keterangan = 'Malam';
+                }
+                $waktuSekarang = $now->format('H:i') . ' ' . $keterangan;
+            @endphp
+
+            <div class="form-grid">
                 <div class="form-group">
-                    <label>Ruas Jalan Tol <span class="required">*</span></label>
-                    <select name="jalan_id" required>
-                        <option value="" disabled selected>Pilih jalan tol</option>
-                        @foreach($jalanList as $j)
-                            <option value="{{ $j->id }}">{{ $j->nama_jalan }} - {{ $j->kota }}</option>
-                        @endforeach
-                    </select>
+                    <label>Tanggal Kejadian <span class="required">*</span></label>
+                    <input type="date" name="tanggal" value="{{ $tanggalSekarang }}" readonly required>
                 </div>
-
                 <div class="form-group">
-                    <label>Lokasi Detail Kejadian <span class="required">*</span></label>
-                    <input type="text" name="lokasi" placeholder="Contoh: Lajur kanan setelah rest area" required />
+                    <label>Waktu Kejadian <span class="required">*</span></label>
+                    <input type="text" name="waktu" value="{{ $waktuSekarang }}" readonly required>
                 </div>
+            </div>
 
-                <div class="form-group" style="margin-bottom: 30px;">
-                    <label>Titik Koordinat <span class="required">*</span></label>
-                    <div class="gpsStatus" id="gpsStatusBox">
-                        <i class='bx bx-loader-alt bx-spin' id="gpsIcon"></i>
-                        <span id="gpsText">Mencari lokasi (GPS) otomatis...</span>
-                    </div>
-                    
-                    <input type="hidden" name="lat" id="latInput" />
-                    <input type="hidden" name="lng" id="lngInput" />
-                    
-                    <div id="map" style="height: 300px; width: 100%; border-radius: 10px; border: 1.5px solid var(--border-color); display: none;"></div>
-                </div>
+            <div class="form-group">
+                <label for="jalan_id">Ruas Jalan Tol <span class="required">*</span></label>
+                <select name="jalan_id" id="jalan_id" required>
+                    <option value="" disabled selected>-- Pilih Ruas Jalan Tol --</option>
+                    @foreach($jalanList as $j)
+                        <option value="{{ $j->id }}">{{ $j->nama_jalan }} - {{ $j->kota }} ({{ $j->panjang }} km)</option>
+                    @endforeach
+                </select>
+            </div>
 
+            <div class="form-grid">
                 <div class="form-group">
-                    <label>Jenis Kecelakaan <span class="required">*</span></label>
-                    <input type="text" name="jenis" placeholder="Contoh: Tabrakan beruntun" required />
+                    <label for="km">Lokasi Kilometer (KM) <span class="required">*</span></label>
+                    <input type="text" name="km" id="km" placeholder="Contoh: KM 92 B atau KM 120" value="{{ old('km') }}" required>
                 </div>
-
                 <div class="form-group">
-                    <label>Penyebab (Opsional)</label>
-                    <input type="text" name="penyebab" placeholder="Mengantuk, rem blong, dll" />
+                    <label for="jumlah_korban">Jumlah Korban <span class="required">*</span></label>
+                    <input type="number" name="jumlah_korban" id="jumlah_korban" min="0" value="{{ old('jumlah_korban', 0) }}" placeholder="0 jika tidak ada korban" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="lokasi">Lokasi Detail Kejadian <span class="required">*</span></label>
+                <input type="text" name="lokasi" id="lokasi" placeholder="Contoh: Lajur kanan setelah rest area arah Jakarta" value="{{ old('lokasi') }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Titik Koordinat (Satelit GPS) <span class="required">*</span></label>
+                <div class="gps-status-box" id="gpsStatusBox">
+                    <i class='bx bx-loader-alt bx-spin' id="gpsIcon"></i>
+                    <span id="gpsText">Mendeteksi lokasi satelit GPS otomatis...</span>
                 </div>
 
+                <input type="hidden" name="lat" id="latInput" value="{{ old('lat') }}">
+                <input type="hidden" name="lng" id="lngInput" value="{{ old('lng') }}">
+
+                <div id="map" class="form-map-preview" style="display: none;"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="jenis">Jenis Kecelakaan <span class="required">*</span></label>
+                <input type="text" name="jenis" id="jenis" placeholder="Contoh: Tabrakan Beruntun, Mobil Terguling, Pecah Ban" value="{{ old('jenis') }}" required>
+            </div>
+
+            <div class="form-grid">
                 <div class="form-group">
-                    <label>Dampak (Opsional)</label>
-                    <input type="text" name="dampak" placeholder="2 luka berat, 1 meninggal, dll" />
+                    <label for="penyebab">Penyebab Insiden (Opsional)</label>
+                    <input type="text" name="penyebab" id="penyebab" placeholder="Contoh: Pengemudi Mengantuk, Jalan Licin" value="{{ old('penyebab') }}">
                 </div>
-
                 <div class="form-group">
-                    <label>Foto Bukti <span class="required">*</span></label>
-                    <input type="file" name="foto" accept="image/jpeg, image/png, image/gif" required />
-                    <small class="helpText">Max 5MB. Format: JPG, PNG, GIF</small>
+                    <label for="dampak">Dampak Lalu Lintas (Opsional)</label>
+                    <input type="text" name="dampak" id="dampak" placeholder="Contoh: Macet 2 km, Lajur 1 & 2 Tertutup" value="{{ old('dampak') }}">
                 </div>
+            </div>
 
+            <div class="form-grid">
                 <div class="form-group">
-                    <label>Video Bukti (Opsional)</label>
-                    <input type="file" name="video" accept="video/mp4, video/quicktime, video/x-msvideo" />
-                    <small class="helpText">Max 50MB. Format: MP4, MOV, AVI</small>
+                    <label for="foto">Foto Bukti Kejadian <span class="required">*</span></label>
+                    <input type="file" name="foto" id="foto" accept="image/jpeg,image/png,image/gif" required>
+                    <small class="help-text">Format didukung: JPG, PNG, GIF. Maksimal 5MB.</small>
                 </div>
+                <div class="form-group">
+                    <label for="video">Video Bukti Kejadian (Opsional)</label>
+                    <input type="file" name="video" id="video" accept="video/mp4,video/quicktime,video/x-msvideo">
+                    <small class="help-text">Format didukung: MP4, MOV, AVI. Maksimal 50MB.</small>
+                </div>
+            </div>
 
-                <button type="submit" class="btn btn-primary btnSubmit" id="btnSubmit" disabled>
-                    Kirim Laporan
-                </button>
-            </form>
-        </div>
+            <button type="submit" class="btn btn-primary btn-full" id="btnSubmit" style="padding: 14px; font-size: 16px; margin-top: var(--space-2);" disabled>
+                <i class='bx bx-send'></i>
+                <span>Kirim Laporan</span>
+            </button>
+        </form>
     </div>
 </div>
 @endsection
@@ -156,7 +165,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 marker.setLatLng([lat, lng]);
             }
         } else {
-            // Leaflet Map Initialization
             map = L.map('map', { 
                 zoomControl: true, 
                 scrollWheelZoom: true, 
@@ -164,10 +172,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }).setView([lat, lng], 15);
             
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                attribution: '&copy; Kontributor OpenStreetMap'
             }).addTo(map);
             
-            // Marker is fixed to the detected location to prevent fake reports
             marker = L.marker([lat, lng], { draggable: false }).addTo(map);
         }
     }
@@ -178,43 +185,37 @@ document.addEventListener('DOMContentLoaded', function() {
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
                 
-                gpsStatusBox.className = 'gpsStatus success';
+                gpsStatusBox.className = 'gps-status-box success';
                 gpsIcon.className = 'bx bx-check-circle';
-                gpsText.textContent = 'Lokasi GPS Anda berhasil dideteksi dan dikunci otomatis.';
+                gpsText.textContent = 'Lokasi GPS Anda berhasil dideteksi dan dikunci otomatis (' + lat.toFixed(4) + ', ' + lng.toFixed(4) + ').';
                 
                 initMap(lat, lng);
             },
             function(err) {
-                console.error(err);
-                gpsStatusBox.className = 'gpsStatus success';
+                gpsStatusBox.className = 'gps-status-box success';
                 gpsIcon.className = 'bx bx-map-pin';
-                gpsText.innerHTML = '<strong>Akses Lokasi Ditolak:</strong> Anda tidak dapat membuat laporan tanpa menyalakan lokasi GPS (GPS Wajib).';
-                
-                // Fallback coordinates: Jakarta (-6.2088, 106.8456)
+                gpsText.textContent = 'Menggunakan koordinat default ruas tol Jakarta (-6.2088, 106.8456).';
                 initMap(-6.2088, 106.8456);
             },
             { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
         );
     } else {
-        gpsStatusBox.className = 'gpsStatus success';
+        gpsStatusBox.className = 'gps-status-box success';
         gpsIcon.className = 'bx bx-map-pin';
-        gpsText.innerHTML = '<strong>Akses Lokasi Ditolak:</strong> Anda tidak dapat membuat laporan tanpa menyalakan lokasi GPS (GPS Wajib).';
-        
-        // Fallback coordinates: Jakarta (-6.2088, 106.8456)
+        gpsText.textContent = 'Menggunakan koordinat default ruas tol Jakarta (-6.2088, 106.8456).';
         initMap(-6.2088, 106.8456);
     }
 
     document.getElementById('formLapor').addEventListener('submit', function(e) {
         if (!latInput.value) {
             e.preventDefault();
-            alert('Menunggu titik lokasi GPS Anda. Pastikan Anda mengizinkan akses lokasi.');
-            window.scrollTo(0, 0);
+            alert('Menunggu titik koordinat GPS. Pastikan izin lokasi aktif.');
             return;
         }
-        if (!confirm('Apakah kamu yakin ingin mengirim laporan ini? Cek terlebih dahulu data dan titik lokasi Anda.')) {
+        if (!confirm('Apakah Anda yakin data laporan insiden sudah lengkap dan benar?')) {
             e.preventDefault();
         } else {
-            btnSubmit.innerHTML = '<span class="loader"></span>';
+            btnSubmit.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Mengirim Laporan...";
             btnSubmit.disabled = true;
         }
     });

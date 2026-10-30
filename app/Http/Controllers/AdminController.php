@@ -25,6 +25,8 @@ class AdminController extends Controller
                 'tanggal' => $l->tanggal,
                 'nama_jalan' => $l->jalan ? $l->jalan->nama_jalan : null,
                 'lokasi' => $l->lokasi,
+                'km' => $l->km,
+                'jumlah_korban' => $l->jumlah_korban,
                 'jenis' => $l->jenis,
                 'pelapor' => $l->user ? $l->user->nama : null,
                 'status' => $l->status
@@ -55,11 +57,35 @@ class AdminController extends Controller
     public function postJalan(Request $request)
     {
         Jalan::create($request->validate([
-            'nama_jalan' => 'required',
-            'kota' => 'nullable',
+            'nama_jalan' => 'required|string|max:255',
+            'kota' => 'nullable|string|max:255',
             'panjang' => 'required|numeric'
         ]));
         return back()->with('success', 'Jalan berhasil ditambah');
+    }
+
+    public function updateJalan(Request $request)
+    {
+        $jalan = Jalan::findOrFail($request->id);
+        $jalan->update($request->validate([
+            'nama_jalan' => 'required|string|max:255',
+            'kota' => 'nullable|string|max:255',
+            'panjang' => 'required|numeric'
+        ]));
+        return back()->with('success', 'Data jalan tol berhasil diperbarui');
+    }
+
+    public function toggleUserStatus(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'Anda tidak dapat mengubah status akun Anda sendiri.');
+        }
+
+        $user->status = ($user->status === 'aktif') ? 'nonaktif' : 'aktif';
+        $user->save();
+
+        return back()->with('success', 'Status pengguna "' . $user->nama . '" berhasil diubah menjadi ' . $user->status);
     }
 
     public function deleteJalan(Request $request)

@@ -1,65 +1,67 @@
 @extends('layouts.app')
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('css/pengaturan.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/riwayat.css') }}">
-@endpush
-
 
 @section('content')
-<div class="main">
-    <div class="container gridContainer">
-        <aside class="sidebarPengaturan">
-            <h3 style="margin-bottom: 20px; color: var(--secondary-color);">Menu Akun</h3>
-            <ul class="menuList">
-                <li>
-                    <a href="{{ route('pengaturan') }}" class="{{ request()->routeIs('pengaturan') ? 'active' : '' }}">
-                        <i class='bx bx-user'></i> Profil
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('riwayat') }}" class="{{ request()->routeIs('riwayat') ? 'active' : '' }}">
-                        <i class='bx bx-history'></i> Riwayat Laporan
-                    </a>
-                </li>
-                <li>
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <a href="#" onclick="if(confirm('Yakin ingin keluar?')) this.closest('form').submit();" style="color: var(--danger);">
-                            <i class='bx bx-log-out'></i> Keluar
-                        </a>
-                    </form>
-                </li>
-            </ul>
-        </aside>
+<div class="container user-layout-grid">
+    <!-- User Sidebar Component -->
+    @include('components.user-sidebar')
 
-        <section class="contentArea">
-            <h2 style="margin-bottom: 24px; color: var(--secondary-color);">Riwayat Laporan Saya</h2>
-            
-            <div class="laporanList">
-                @forelse($laporan as $l)
-                    <div class="laporanCard">
-                        <div class="cardHeader">
-                            <div>
-                                <h3>{{ $l->jenis }}</h3>
-                                <span class="date"><i class='bx bx-calendar'></i> {{ \Carbon\Carbon::parse($l->tanggal)->format('d M Y') }}</span>
+    <!-- Main Content Area -->
+    <div class="card" style="padding: var(--space-5);">
+        <h2 style="font-size: 22px; font-weight: 700; color: var(--navy); margin-bottom: var(--space-4); border-bottom: 1px solid var(--border); padding-bottom: var(--space-2);">
+            Riwayat Laporan Saya
+        </h2>
+
+        <div class="reports-stack-list">
+            @forelse($laporan as $l)
+                <div class="report-card-item">
+                    <div class="report-card-header">
+                        <div>
+                            <h3>{{ $l->jenis }}</h3>
+                            <div class="report-card-meta">
+                                <i class='bx bx-calendar'></i>
+                                <span>{{ \Carbon\Carbon::parse($l->tanggal)->format('d F Y') }} &bull; {{ $l->waktu }}</span>
                             </div>
-                            <span class="statusBadge {{ strtolower($l->status) }}">
-                                {{ ucfirst($l->status) }}
-                            </span>
                         </div>
-                        <div class="cardBody">
-                            <p><strong>Jalan Tol:</strong> {{ $l->jalan ? $l->jalan->nama_jalan : '-' }}</p>
-                        </div>
+                        <span class="badge badge-{{ strtolower($l->status) }}">
+                            @if(strtolower($l->status) === 'valid')
+                                Terverifikasi
+                            @elseif(strtolower($l->status) === 'invalid')
+                                Ditolak
+                            @else
+                                Menunggu
+                            @endif
+                        </span>
                     </div>
-                @empty
-                    <div class="emptyState">
-                        <i class='bx bx-file-blank'></i>
-                        <h3>Belum Ada Laporan</h3>
-                        <p>Anda belum pernah membuat laporan kecelakaan.</p>
+
+                    <div class="report-card-body">
+                        <p style="color: var(--muted); font-size: 14px; margin-bottom: 6px;">
+                            <strong>Ruas Tol:</strong> {{ $l->jalan ? $l->jalan->nama_jalan : '-' }}
+                            @if($l->km)
+                                &bull; <strong style="color: var(--primary);">{{ $l->km }}</strong>
+                            @endif
+                        </p>
+                        <p style="font-size: 13px; color: var(--text);">
+                            <strong>Detail Lokasi:</strong> {{ $l->lokasi }}
+                        </p>
+                        @if($l->penyebab)
+                            <p style="font-size: 13px; color: var(--muted); margin-top: 4px;">
+                                <strong>Penyebab:</strong> {{ $l->penyebab }}
+                            </p>
+                        @endif
                     </div>
-                @endforelse
-            </div>
-        </section>
+                </div>
+            @empty
+                <div class="empty-state-box">
+                    <i class='bx bx-file'></i>
+                    <h3>Belum Ada Laporan</h3>
+                    <p>Anda belum pernah mengirimkan laporan insiden kecelakaan lalu lintas jalan tol.</p>
+                    <a href="{{ route('lapor') }}" class="btn btn-primary">
+                        <i class='bx bx-plus'></i>
+                        <span>Mulai Laporkan Kecelakaan</span>
+                    </a>
+                </div>
+            @endforelse
+        </div>
     </div>
 </div>
 @endsection

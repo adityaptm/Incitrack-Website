@@ -37,6 +37,12 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user && password_verify($request->password, $user->password)) {
+            if ($user->status === 'nonaktif') {
+                return back()->withErrors([
+                    'email' => 'Akun Anda telah dinonaktifkan oleh Administrator.',
+                ])->onlyInput('email');
+            }
+
             Auth::login($user);
             $request->session()->regenerate();
 

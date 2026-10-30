@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Laporan;
 use App\Models\Jalan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class PageController extends Controller
 {
@@ -61,6 +62,8 @@ class PageController extends Controller
             'waktu' => 'required',
             'jalan_id' => 'required',
             'lokasi' => 'required',
+            'km' => 'required|string|max:50',
+            'jumlah_korban' => 'required|integer|min:0',
             'jenis' => 'required',
             'foto' => 'required|image|max:5120',
             'video' => 'nullable|mimes:mp4,mov,avi|max:51200',
@@ -90,6 +93,8 @@ class PageController extends Controller
             'tanggal' => $request->tanggal,
             'waktu' => $request->waktu,
             'lokasi' => $request->lokasi,
+            'km' => $request->km,
+            'jumlah_korban' => $request->jumlah_korban,
             'jenis' => $request->jenis,
             'penyebab' => $request->penyebab,
             'dampak' => $request->dampak,
@@ -111,6 +116,7 @@ class PageController extends Controller
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('lokasi', 'LIKE', "%{$search}%")
+                  ->orWhere('km', 'LIKE', "%{$search}%")
                   ->orWhere('jenis', 'LIKE', "%{$search}%")
                   ->orWhereHas('jalan', function($qJalan) use ($search) {
                       $qJalan->where('nama_jalan', 'LIKE', "%{$search}%");
@@ -132,13 +138,17 @@ class PageController extends Controller
     public function updatePengaturan(Request $request)
     {
         $request->validate([
-            'nama' => 'required',
-            'email' => 'required|email|unique:users,email,'.Auth::id()
+            'nama' => 'required|string|max:100',
+            'email' => 'required|email|unique:users,email,'.Auth::id(),
+            'password' => 'nullable|min:6'
         ]);
 
         $user = Auth::user();
         $user->nama = $request->nama;
         $user->email = $request->email;
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
         $user->save();
 
         return back()->with('success', 'Profil berhasil diperbarui!');

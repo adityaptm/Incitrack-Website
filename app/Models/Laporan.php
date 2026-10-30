@@ -16,6 +16,8 @@ class Laporan extends Model
         'tanggal',
         'waktu',
         'lokasi',
+        'km',
+        'jumlah_korban',
         'jenis',
         'penyebab',
         'dampak',

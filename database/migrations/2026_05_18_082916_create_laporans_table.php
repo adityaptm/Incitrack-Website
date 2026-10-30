@@ -18,6 +18,8 @@ return new class extends Migration
             $table->date('tanggal');
             $table->string('waktu');
             $table->string('lokasi');
+            $table->string('km')->nullable();
+            $table->integer('jumlah_korban')->default(0);
             $table->string('jenis');
             $table->string('penyebab')->nullable();
             $table->string('dampak')->nullable();

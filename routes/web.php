@@ -33,12 +33,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/riwayat', [PageController::class, 'riwayat'])->name('riwayat');
 });
 
-Route::middleware(['auth'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.home');
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::post('/verifikasi', [AdminController::class, 'postVerifikasi']);
     Route::post('/jalan', [AdminController::class, 'postJalan']);
+    Route::put('/jalan', [AdminController::class, 'updateJalan']);
     Route::delete('/jalan', [AdminController::class, 'deleteJalan']);
     Route::delete('/laporan', [AdminController::class, 'deleteLaporan']);
     Route::delete('/contact', [AdminController::class, 'deleteContact']);
+    Route::post('/user/toggle-status', [AdminController::class, 'toggleUserStatus']);
 });

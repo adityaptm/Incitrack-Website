@@ -1,38 +1,48 @@
-<button class="mobileToggle" onclick="document.getElementById('adminSidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').style.display='block';">
-    <i class='bx bx-menu'></i>
-</button>
-
-<div class="overlay" id="sidebarOverlay" onclick="document.getElementById('adminSidebar').classList.remove('open'); this.style.display='none';"></div>
-
-<aside class="sidebar" id="adminSidebar">
-    <div class="logoSidebar">
-        <img src="{{ asset('it.png') }}" alt="INCITRACK" />
+<aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-header">
+        <div class="logo-dark-container" style="padding: 4px;">
+            <img src="{{ asset('images/logo.png') }}" alt="INCITRACK" style="height: 38px;">
+        </div>
         <h2>INCITRACK</h2>
     </div>
-    <div class="userInfo">
-        <div class="avatar"><i class='bx bx-user'></i></div>
-        <p>{{ Auth::user()->nama }}</p>
+
+    @php
+        $namaParts = explode(' ', trim(Auth::user()->nama));
+        $initials = '';
+        foreach (array_slice($namaParts, 0, 2) as $p) {
+            $initials .= strtoupper(substr($p, 0, 1));
+        }
+    @endphp
+
+    <div class="admin-sidebar-user">
+        <div class="admin-avatar-initials">{{ $initials }}</div>
+        <div class="admin-sidebar-user-info">
+            <strong>{{ Auth::user()->nama }}</strong>
+            <span>Administrator</span>
+        </div>
     </div>
-    <nav class="nav">
-        <ul>
-            <li>
-                <a href="{{ route('admin.home') }}" class="{{ request()->routeIs('admin.home') ? 'active' : '' }}">
-                    <i class='bx bx-home' style="font-size: 20px;"></i> Beranda
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                    <i class='bx bx-data' style="font-size: 20px;"></i> Dashboard
-                </a>
-            </li>
-            <li>
-                <form action="{{ route('logout') }}" method="POST" id="logoutForm">
-                    @csrf
-                    <a href="#" onclick="if(confirm('Yakin ingin keluar?')) document.getElementById('logoutForm').submit();" class="logoutBtn">
-                        <i class='bx bx-log-out' style="font-size: 20px;"></i> Logout
-                    </a>
-                </form>
-            </li>
-        </ul>
-    </nav>
+
+    <ul class="admin-sidebar-nav">
+        <li>
+            <a href="{{ route('admin.home') }}" class="admin-sidebar-link {{ request()->routeIs('admin.home') ? 'active' : '' }}">
+                <i class='bx bx-home'></i>
+                <span>Beranda</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.dashboard') }}" class="admin-sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                <i class='bx bx-grid-alt'></i>
+                <span>Dashboard Data</span>
+            </a>
+        </li>
+        <li style="margin-top: 24px;">
+            <form action="{{ route('logout') }}" method="POST" id="adminSidebarLogoutForm">
+                @csrf
+                <button type="button" onclick="if(confirm('Apakah Anda yakin ingin keluar dari panel administrator?')) document.getElementById('adminSidebarLogoutForm').submit();" class="admin-sidebar-link danger">
+                    <i class='bx bx-log-out'></i>
+                    <span>Keluar</span>
+                </button>
+            </form>
+        </li>
+    </ul>
 </aside>

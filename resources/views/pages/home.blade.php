@@ -1,54 +1,74 @@
 @extends('layouts.app')
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
-@endpush
-
 
 @section('content')
 <!-- Hero Section -->
-<section class="hero">
-    <div class="container heroContainer">
-        <div class="heroImage">
-            <img src="{{ asset('it.png') }}" alt="INCITRACK Logo" />
+<section class="home-hero-section">
+    <div class="container home-hero-grid">
+        <div class="home-hero-image-wrap">
+            <img src="{{ asset('images/logo.png') }}" alt="INCITRACK Logo" class="home-hero-logo">
         </div>
-        <div class="heroText">
+        <div class="home-hero-content">
             <h1>Tentang INCITRACK</h1>
             <p>
-                Platform visualisasi dan pencatatan kecelakaan lalu lintas untuk meningkatkan keselamatan jalan raya di Indonesia.
+                Platform pemantauan, visualisasi, dan pencatatan insiden kecelakaan jalan tol nasional secara terintegrasi. Kami menghubungkan pengguna jalan dengan pengelola tol untuk mempercepat respons penanganan dan meningkatkan keselamatan transportasi darat.
             </p>
-            <a href="{{ route('lapor') }}" class="btn btn-primary">Laporkan Sekarang</a>
+            <a href="{{ route('lapor') }}" class="btn btn-primary" style="padding: 14px 28px; font-size: 16px;">
+                <i class='bx bx-plus-circle'></i>
+                <span>Laporkan Sekarang</span>
+            </a>
         </div>
     </div>
 </section>
 
-<!-- Stats Section -->
-<section class="stats">
-    <div class="container statsContainer">
-        <div class="statItem">
-            <h3>{{ number_format($stats['total_kecelakaan'], 0, ',', '.') }}</h3>
-            <p>Total Kecelakaan Tahun Ini</p>
+<!-- Statistics Strip (Navy Full Width) -->
+<section class="stats-strip">
+    <div class="container stats-grid">
+        <div class="stats-item">
+            <h3>{{ number_format($stats['total_kecelakaan'] ?? 0, 0, ',', '.') }}</h3>
+            <p>Total Kecelakaan Terdata</p>
         </div>
-        <div class="statItem">
-            <h3>{{ number_format($stats['laporan_terverifikasi'], 0, ',', '.') }}</h3>
-            <p>Laporan Terverifikasi</p>
+        <div class="stats-item">
+            <h3>{{ number_format($stats['laporan_terverifikasi'] ?? 0, 0, ',', '.') }}</h3>
+            <p>Laporan Terverifikasi Petugas</p>
         </div>
-        <div class="statItem">
-            <h3>{{ $stats['peningkatan_keselamatan'] }}%</h3>
-            <p>Peningkatan Keselamatan</p>
+        <div class="stats-item">
+            <h3>{{ $stats['peningkatan_keselamatan'] ?? 0 }}%</h3>
+            <p>Tingkat Validitas & Tanggap Darurat</p>
         </div>
     </div>
 </section>
 
-<!-- Content Grid -->
-<section class="contentGrid">
+<!-- Feature Showcase Sections (Alternating) -->
+<section class="home-features-section">
     <div class="container">
-        <div class="textImageReverse">
-            <p>Pelaporan yang akurat dapat membantu pemerintah memperbaiki titik rawan kecelakaan.</p>
-            <div class="imagePlaceholder" style="background-image: url('{{ asset('image 6.png') }}')"></div>
+        <!-- Feature 1: Image Left, Text Right -->
+        <div class="feature-row">
+            <div class="feature-box-visual">
+                <i class='bx bx-line-chart'></i>
+                <h3 style="font-size: 18px; font-weight: 700; color: var(--navy);">Analisis Titik Rawan</h3>
+                <p style="font-size: 13px; color: var(--muted); max-width: 280px; margin-top: 4px;">Pemetaan algoritma untuk mendeteksi area rawan insiden di sepanjang kilometer tol.</p>
+            </div>
+            <div class="feature-text-content">
+                <h2>Pelaporan Cepat Berbasis Koordinat GPS</h2>
+                <p>
+                    Setiap laporan insiden yang masuk divalidasi dengan titik koordinat satelit GPS secara otomatis. Hal ini memastikan petugas derek, ambulans, dan patroli jalan tol dapat menemukan lokasi kejadian secara presisi tanpa hambatan komunikasi.
+                </p>
+            </div>
         </div>
-        <div class="textImage">
-            <div class="imagePlaceholder" style="background-image: url('{{ asset('maps.jpg') }}')"></div>
-            <p>Visualisasi data kami membantu memahami area berbahaya secara lebih mudah.</p>
+
+        <!-- Feature 2: Text Left, Image Right -->
+        <div class="feature-row">
+            <div class="feature-text-content">
+                <h2>Transparansi Data & Visualisasi Interaktif</h2>
+                <p>
+                    Data kecelakaan terverifikasi disajikan dalam bentuk peta digital interaktif yang dapat diakses publik. Pengguna jalan tol dapat merencanakan perjalanan dengan lebih waspada pada titik-titik kilometer yang teridentifikasi rawan insiden.
+                </p>
+            </div>
+            <div class="feature-box-visual">
+                <i class='bx bx-map-pin'></i>
+                <h3 style="font-size: 18px; font-weight: 700; color: var(--navy);">Peta Interaktif Nasional</h3>
+                <p style="font-size: 13px; color: var(--muted); max-width: 280px; margin-top: 4px;">Informasi spasial terperinci di seluruh ruas jalan tol di pulau Jawa, Sumatera, hingga Bali.</p>
+            </div>
         </div>
     </div>
 </section>
